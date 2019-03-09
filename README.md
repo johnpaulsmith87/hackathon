@@ -1,5 +1,6 @@
 # hackathon
 
+**Team**: Salamanda
 
 ## Program Structure v1
 
