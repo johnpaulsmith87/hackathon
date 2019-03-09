@@ -1,6 +1,8 @@
 
 #include <Servo.h>
 #define MAX_ANGLE 180;
+#define TURN_LEFT 135;
+#define TURN_RIGHT 45;
 long tracking[MAX_ANGLE];
 //each cell is [angle, signal]
 int pos = 0;
@@ -9,7 +11,7 @@ int triggerPin = 2;
 int echoPin = 4;
 int pwmMotor1 = 9;
 int pwmMotor2 = 10;
-
+int turnPin = 11;
 
 
 long duration;
@@ -18,6 +20,7 @@ long distance;
 int lastPos;
 long lastAngle;
 
+Servo turningServo;
 Servo sensorServo;
 void setup() {
   // put your setup code here, to run once:
@@ -25,6 +28,8 @@ void setup() {
     tracking[i] = 0l; //initialize to 0
   }
   sensorServo.attach(ssPin);  // attaches the servo on pin 9 to the servo object
+  turningServo.attach(turnPin);
+  
   pinMode(triggerPin, OUTPUT);
   pinMode(echoPin, INPUT);
 
@@ -72,4 +77,48 @@ long getEchoDuration() {
 
 long microsecondsToCenimeters(long microseconds) {
   return microseconds * 0.034 / 2;
+}
+
+//takes as input tracking array
+//outputs 0 for none, 1 for left, 2 for right
+int findObject(){
+  int angle = 0;
+  long smallestDistance = tracking[0];
+  for (int i = 0; i < MAX_ANGLE; i++) {
+    if(tracking[i] < smallestDistance) {
+      smallestDistance = tracking[i];
+      angle = i;
+    }
+  }
+  if (angle <= 180 && angle >= 95)
+    return 1;
+  if (angle >= 0 && angle <= 85) {
+    return 2;
+  }
+  return 0;
+}
+
+
+int turnCar(int turn, int lastTurn) {
+  if (!turn) {
+    return lastTurn;
+  }
+  if (turn == 1 && lastTurn < LEFT_TURN) {
+    turnServo.write(++lastTurn);
+  } else if (turn == 2 && lastTurn > RIGHT_TURN) {
+    turnServo.write(--lastTurn);
+  }
+  return lastTurn;
+}
+
+
+//checks distance
+//returns 0 for stop, 1 for low speed and 2 for high
+int calculateSpeed(long distance) {
+  if (distance <= 5.0)
+    return 0;
+  if (distance > 5.0 && distance <= 15.0)
+    return 1;
+  if (distance > 15.0 && distance <= 30.0)
+    return 2;
 }
