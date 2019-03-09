@@ -1,49 +1,58 @@
 
 #include <Servo.h>
-long tracking[180];
+#define MAX_ANGLE 180;
+long tracking[MAX_ANGLE];
 //each cell is [angle, signal]
-int pos = 0;  
-int servoSweep = 9;
-
+int pos = 0;
+int ssPin = 8;
 int triggerPin = 2;
 int echoPin = 4;
+int pwmMotor1 = 9;
+int pwmMotor2 = 10;
+
+
 
 long duration;
 long distance;
-Servo myservo;
+
+int lastPos;
+long lastAngle;
+
+Servo sensorServo;
 void setup() {
   // put your setup code here, to run once:
   for (int i = 0; i < 180; i++) {
-    tracking[i] = 0; //initialize to 0
+    tracking[i] = 0l; //initialize to 0
   }
-    myservo.attach(servoSweep);  // attaches the servo on pin 9 to the servo object
-    pinMode(triggerPin, OUTPUT);
-    pinMode(echoPin, INPUT);
+  sensorServo.attach(ssPin);  // attaches the servo on pin 9 to the servo object
+  pinMode(triggerPin, OUTPUT);
+  pinMode(echoPin, INPUT);
 
-    //Serial.begin(9600);
-  
+  //Serial.begin(9600);
+
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  for (pos = 0; pos <= 180; pos += 1) { // goes from 0 degrees to 180 degrees
+  for (pos = 0; pos <= MAX_ANGLE; pos += 1) { // goes from 0 degrees to 180 degrees
     // in steps of 1 degree
-    myservo.write(pos);              // tell servo to go to position in variable 'pos'
+    sensorServo.write(pos);              // tell servo to go to position in variable 'pos'
     sensorUpdate(pos);                      // waits 15ms for the servo to reach the position
-    
   }
-  for (pos = 180; pos >= 0; pos -= 1) { // goes from 180 degrees to 0 degrees
-    myservo.write(pos);              // tell servo to go to position in variable 'pos'
+  for (pos = MAX_ANGLE; pos >= 0; pos -= 1) { // goes from 180 degrees to 0 degrees
+    sensorServo.write(pos);              // tell servo to go to position in variable 'pos'
     sensorUpdate(pos);                     // waits 15ms for the servo to reach the position
   }
 }
 
 
-void sensorUpdate(int angle){
+void sensorUpdate(int angle) {
   sendPulse(10);
   duration = getEchoDuration();
   distance = microsecondsToCentimeters(duration);
+  lastDistance = distance;
   tracking[angle] = distance;
+  lastAngle = pos;
   delay(75);
 }
 
@@ -62,5 +71,5 @@ long getEchoDuration() {
 }
 
 long microsecondsToCenimeters(long microseconds) {
-  return microseconds*0.034/2;
+  return microseconds * 0.034 / 2;
 }
