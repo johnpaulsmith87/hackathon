@@ -11,14 +11,13 @@
 
 
 ### Motion Control Software
-* Motor Controller
+* Motion Controller
 * Sensor Sweep Controller
-
-### Feedback Display
-* Display Output
-* Status Update 
 
 ### Signal Processing
 * Input Signal Detection
 * Input Signal Processing
-* Input Signal Parsing
+
+### Website
+* front end
+* back end
