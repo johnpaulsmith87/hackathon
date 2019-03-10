@@ -139,7 +139,10 @@ void sensorUpdate(int angle)
   lastDistance = distance;
   tracking[angle] = distance;
   lastAngle = angle;
-  Serial.print(sprintf("{\"distance\": %ld,\"angle\": %ld}\n", distance, angle));
+  char buf[50];
+  sprintf(buf, "{\"distance\": %ld, \"angle\": %ld}\n", distance, angle);
+  Serial.print(buf);
+//  Serial.printf("{\"distance\": %ld,\"angle\": %ld}\n", distance, angle);
   delay(8);
 }
 
@@ -239,9 +242,6 @@ int turnCar(int turn, int lastTurn)
  */
 int calculateSpeed(long distance)
 {
-  Serial.print("speed, distance: ");
-  Serial.print(distance);
-  Serial.print("\n");
   // stop car
   if (distance <= 5.0)
     return SPEED_STOP;
