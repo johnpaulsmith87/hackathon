@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+
+<script>
+    console.log('js started')
+
+    const socket = io();
+    socket.on('connect', function () {
+        console.log('connected')
+    });
+    socket.on('event', function (data) { });
+    socket.on('disconnect', function () { });
+</script>
+
+<body>
+
+</body>
+
+</html>
