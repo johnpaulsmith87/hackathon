@@ -114,11 +114,12 @@ void sensorUpdate(int angle)
   lastDistance = distance;
   tracking[angle] = distance;
   lastAngle = angle;
-  Serial.print("angle: ");
-  Serial.print(angle);
-  Serial.print(" distance: ");
-  Serial.print(distance);
-  Serial.print("\n");
+  Serial.print(sprintf("{\"distance\": %ld,\"angle\": %ld}\n", distance, angle))
+  // Serial.print("angle: ");
+  // Serial.print(angle);
+  // Serial.print(" distance: ");
+  // Serial.print(distance);
+  // Serial.print("\n");
   delay(8);
 }
 
