@@ -2,6 +2,7 @@ const Server = require('socket.io');
 const SerialPort = require('socket.io-serialport');
  
 const io = new Server(8080);
+io.origins('*:*') //enable cors
  
 const serialport = new SerialPort({
   io: io,
