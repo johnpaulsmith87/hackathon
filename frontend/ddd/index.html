@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Socket</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <script src="index.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="title">Team Salamander</h1>
+        <div class="card controls">
+            <h2>Controls</h2>
+            <div class="controls__flex">
+                <button onclick="start()" class="controls__control controls--start">⚡</button>
+                <button onclick="stop()" class="controls__control controls--stop">🛑</button>
+            </div>
+        </div>
+        <div class="card diagnostics">
+            <h2>Diagnostics</h2>
+            <h3>Status: <span id="status" class="data">NA</span></h3>
+            <h3>Velocity: <span id="velocity" class="data">NA</span></h3>
+            <h3>Ultrasonic: <span id="ultrasonic" class="data">NA</span></h3>
+            <h3>Turning Angle: <span id="angle" class="data">NA</span></h3>
+        </div>
+    </div>
+</body>
+
+</html>

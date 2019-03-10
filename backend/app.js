@@ -1,7 +1,11 @@
-const Server = require("socket.io");
 const SerialPort = require("socket.io-serialport");
 
-const io = new Server(8080);
+const app = require('express')()
+const cors = require('cors')
+app.use(cors())
+const http = require('http').Server(app)
+const io = require("socket.io")(http);
+
 io.origins('*:*') //enable cors
  
 const serialport = new SerialPort({

@@ -13,7 +13,7 @@ export class DiagnosticsComponent implements OnInit {
   constructor(private serialService: SerialService) { }
 
   ngOnInit() {
-    this.serialService.status.subscribe(data => console.log(data))
+    this.serialService.status.subscribe(status => console.log(status))
   }
 
 }
