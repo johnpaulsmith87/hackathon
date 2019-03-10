@@ -1,6 +1,6 @@
 console.log('index.js started')
 
-const sioUrl = `${window.location.hostname}:3031`;
+const sioUrl = `192.168.43.196:8080`;
 const socket = io(sioUrl);
 
 socket.on('connection', function () {
