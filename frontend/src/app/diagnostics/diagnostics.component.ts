@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
+import { SerialService } from '../serial.service';
 
 @Component({
   selector: 'app-diagnostics',
@@ -7,9 +9,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DiagnosticsComponent implements OnInit {
 
-  constructor() { }
+
+  constructor(private serialService: SerialService) { }
 
   ngOnInit() {
+    this.serialService.status.subscribe(data => console.log(data))
   }
 
 }
