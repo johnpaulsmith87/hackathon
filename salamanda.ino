@@ -27,8 +27,8 @@
 #define SPEED_LOW 1
 #define SPEED_HIGH 2
 
-#define ANALOG_SPEED_HIGH 50
-#define ANALOG_SPEED_LOW 25
+#define ANALOG_SPEED_HIGH 255
+#define ANALOG_SPEED_LOW 200
 #define ANALOG_SPEED_STOP 0
 
 // ultrasonic sensor sweep
@@ -43,6 +43,12 @@ int echoPin = 4;
 int pwmMotor1 = 9;
 int pwmMotor2 = 10;
 int turnPin = 11;
+
+int front1 = 12;
+int front2 = 13;
+
+int back1 = 7;
+int back2 = 6;
 
 // TODO
 int lastPos;
@@ -64,14 +70,31 @@ void setup()
 
   pinMode(triggerPin, OUTPUT);
   pinMode(echoPin, INPUT);
+  pinMode(pwmMotor1, OUTPUT);
+  pinMode(pwmMotor2, OUTPUT);
+  //pinMode(testPin, OUTPUT);
+  pinMode(front1, OUTPUT);
+  pinMode(front2, OUTPUT);
+  pinMode(back1, OUTPUT);
+  pinMode(back2, OUTPUT);
+  analogWrite(pwmMotor1, ANALOG_SPEED_HIGH);
+  analogWrite(pwmMotor2, ANALOG_SPEED_HIGH);
+  //analogWrite(testPin, ANALOG_SPEED_HIGH);
 
+  digitalWrite(front1, HIGH);
+  digitalWrite(front2, LOW);
+
+  digitalWrite(back1, HIGH);
+  digitalWrite(back2, LOW);
   Serial.begin(9600);
 }
 
 void loop()
 {
   int dir;
+
   // put your main code here, to run repeatedly:
+  //analogWrite(testPin, ANALOG_SPEED_HIGH);
   sweepRight();
   dir = findObject();
   turnTrack = turnCar(dir, turnTrack);
@@ -89,7 +112,8 @@ void sweepLeft()
   { // goes from 0 degrees to 180 degrees
     // in steps of 1 degree
     sensorServo.write(pos); // tell servo to go to position in variable 'pos'
-    sensorUpdate(pos);      // waits 15ms for the servo to reach the position
+    sensorUpdate(pos);
+    //engageEngines();// waits 15ms for the servo to reach the position
   }
 }
 
@@ -99,7 +123,8 @@ void sweepRight()
   for (pos = MAX_ANGLE; pos > MIN_ANGLE; pos--)
   {                         // goes from 180 degrees to 0 degrees
     sensorServo.write(pos); // tell servo to go to position in variable 'pos'
-    sensorUpdate(pos);      // waits 15ms for the servo to reach the position
+    sensorUpdate(pos);
+    //engageEngines();// waits 15ms for the servo to reach the position
   }
 }
 
@@ -114,12 +139,7 @@ void sensorUpdate(int angle)
   lastDistance = distance;
   tracking[angle] = distance;
   lastAngle = angle;
-  Serial.print(sprintf("{\"distance\": %ld,\"angle\": %ld}\n", distance, angle))
-  // Serial.print("angle: ");
-  // Serial.print(angle);
-  // Serial.print(" distance: ");
-  // Serial.print(distance);
-  // Serial.print("\n");
+  Serial.print(sprintf("{\"distance\": %ld,\"angle\": %ld}\n", distance, angle));
   delay(8);
 }
 
@@ -219,7 +239,9 @@ int turnCar(int turn, int lastTurn)
  */
 int calculateSpeed(long distance)
 {
-
+  Serial.print("speed, distance: ");
+  Serial.print(distance);
+  Serial.print("\n");
   // stop car
   if (distance <= 5.0)
     return SPEED_STOP;
@@ -229,26 +251,33 @@ int calculateSpeed(long distance)
     return SPEED_LOW;
 
   // set speed high
-  if (distance > 15.0 && distance <= 30.0)
+  if (distance > 15.0)
     return SPEED_HIGH;
 }
 
 void engageEngines()
 {
   int result = calculateSpeed(lastDistance);
-  if (result == SPEED_HIGH)
+
+  analogWrite(pwmMotor1, ANALOG_SPEED_HIGH);
+  analogWrite(pwmMotor2, ANALOG_SPEED_HIGH);
+  /*if (result == SPEED_HIGH)
   {
+    Serial.print("Engines HIGH\n");
     analogWrite(pwmMotor1, ANALOG_SPEED_HIGH);
     analogWrite(pwmMotor2, ANALOG_SPEED_HIGH);
   }
   else if (result == SPEED_LOW)
   {
+    Serial.print("Engines LOW\n");
     analogWrite(pwmMotor1, ANALOG_SPEED_LOW);
     analogWrite(pwmMotor2, ANALOG_SPEED_LOW);
   }
   else {
+    Serial.print("Engines OFF\n");
     analogWrite(pwmMotor1, ANALOG_SPEED_STOP);
     analogWrite(pwmMotor2, ANALOG_SPEED_STOP);
-  }
+  } */
+ 
 
 }
