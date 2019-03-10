@@ -6,6 +6,10 @@ import { AppComponent } from './app.component';
 import { JoystickComponent } from './joystick/joystick.component';
 import { DiagnosticsComponent } from './diagnostics/diagnostics.component';
 
+import { SocketIoModule, SocketIoConfig} from 'ngx-socket-io'
+
+//192.168.43.196:8080
+const config: SocketIoConfig = {url: 'http://192.168.43.196:8080', options: {}}
 @NgModule({
   declarations: [
     AppComponent,
@@ -14,7 +18,8 @@ import { DiagnosticsComponent } from './diagnostics/diagnostics.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    SocketIoModule.forRoot(config)
   ],
   providers: [],
   bootstrap: [AppComponent]
